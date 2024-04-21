@@ -23,7 +23,7 @@
     "node-telegram-bot-api": "^0.57.0",
     "nodemon": "^2.0.20",
     "telegraf": "^4.8.2",
-    "telegram-bot-framework": "file:../telegramBot",
+    "telegram-bot-framework": "github:Seagullie/telegram-bot-framework",
     "typescript": "^4.8.4"
   },
   "devDependencies": {
