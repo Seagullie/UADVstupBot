@@ -9,6 +9,8 @@
 
         "declaration": true,
         "experimentalDecorators": true,
+
+        "noEmitOnError": false,
     },
 
     // "include": ["src/**/*", "Secrets.ts"],
