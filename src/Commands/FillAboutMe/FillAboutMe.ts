@@ -1,19 +1,34 @@
 import dedent = require("dedent-js")
 import { CommandCallbackWithCtx, InterviewFlow, TGBotFramework, TelegramCommand } from "telegram-bot-framework"
-import { SendMainMenu } from "./SendMainMenu"
-
-type UserDesc = {
-  name: string
-  specialty: string
-  email: string
-}
+import { SendMainMenu } from "../SendMainMenu"
+import { UserInfo } from "../../Database/UserInfoRepository/types/UserInfo"
+import { UserInfoRepository } from "../../Database/UserInfoRepository/UserInfoRepository"
 
 export const FillAboutMeCallback: CommandCallbackWithCtx = async (msg, match, botFramework: TGBotFramework) => {
   let userId = msg.from.id.toString()
-  let aboutMeDict: UserDesc = {
+
+  let firstName = msg.from.first_name
+  let lastName = msg.from.last_name ?? ""
+  let userHandle = msg.from.username ?? ""
+
+  // date in format "12 March 2024"
+  let nowString = new Date().toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  })
+
+  let aboutMeDict: UserInfo = {
     name: "",
     specialty: "",
     email: "",
+
+    TgUserHandle: userHandle,
+    TgUserFirstName: firstName,
+    TgUserLastName: lastName,
+
+    TgUserId: userId,
+    timestampString: nowString,
   }
 
   let aboutUserDict = {
@@ -32,18 +47,19 @@ export const FillAboutMeCallback: CommandCallbackWithCtx = async (msg, match, bo
     expectedResponses: undefined,
     showKb: true,
     onResponse: (r) => {
-      let maxLen = 50
+      aboutMeDict.name = r.text
+    },
 
-      // TODO: add validation logic to framework
+    validateResponse: async (r) => {
+      let maxLen = 50
       if (r.text.length > maxLen) {
-        botFramework.bot.sendMessage(
+        await botFramework.bot.sendMessage(
           r.chat.id,
           `Ваше ім'я занадто довге. Максимальна довжина: ${maxLen} символів. Спробуйте ще раз.`
         )
-        return
+        return false
       }
-
-      aboutMeDict.name = r.text
+      return true
     },
   })
 
@@ -69,10 +85,25 @@ export const FillAboutMeCallback: CommandCallbackWithCtx = async (msg, match, bo
       let aboutMeStr = dedent`
       Ім'я: ${aboutMeDict.name}
       Спеціальність: ${aboutMeDict.specialty}
-      Пошта: ${aboutMeDict.email}`
+      Пошта: ${aboutMeDict.email}
+      Handle користувача: ${aboutMeDict.TgUserHandle}
+      Ім'я користувача: ${aboutMeDict.TgUserFirstName}
+      Прізвище користувача: ${aboutMeDict.TgUserLastName}
+      `
       await botFramework.bot.sendMessage(r.chat.id, aboutMeStr)
 
       await SendMainMenu(msg, match, botFramework)
+
+      UserInfoRepository.saveOrUpdateUserInfo(aboutMeDict)
+    },
+
+    validateResponse: async (r) => {
+      let hasAtSymbol = r.text.includes("@")
+      if (!hasAtSymbol) {
+        await botFramework.bot.sendMessage(r.chat.id, "Введіть коректну пошту. Спробуйте ще раз.")
+        return false
+      }
+      return true
     },
   })
 

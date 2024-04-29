@@ -1,6 +1,6 @@
 import dedent = require("dedent-js")
 import { CommandCallbackWithCtx, InterviewFlow, TGBotFramework, TelegramCommand } from "telegram-bot-framework"
-import { FillAboutMeCallback } from "./FillAboutMe"
+import { FillAboutMeCallback } from "./FillAboutMe/FillAboutMe"
 import { SendMainMenu } from "./SendMainMenu"
 
 const Callback: CommandCallbackWithCtx = async (msg, match, botFramework: TGBotFramework) => {
@@ -10,7 +10,6 @@ const Callback: CommandCallbackWithCtx = async (msg, match, botFramework: TGBotF
   await botFramework.bot.sendMessage(msg.chat.id, introMessage)
 
   await FillAboutMeCallback(msg, match, botFramework)
-
 }
 
 export const StartCommand: TelegramCommand = {

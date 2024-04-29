@@ -5,7 +5,7 @@ import dedent = require("dedent-js")
 // import { TGBot } from "../TelegramBot/TelegramBot"
 import { MONGO_CLIENT, COLLECTION_NAME, DB_NAME } from "./Database/mongoDBClient"
 import { TGBotFramework, TelegramCommand } from "telegram-bot-framework"
-import { FillAboutMeCommand } from "./Commands/FillAboutMe"
+import { FillAboutMeCommand } from "./Commands/FillAboutMe/FillAboutMe"
 import { StartCommand } from "./Commands/Start"
 import { SendMainMenu } from "./Commands/SendMainMenu"
 
