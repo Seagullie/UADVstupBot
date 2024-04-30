@@ -3,11 +3,12 @@ import * as _ from "lodash"
 import dedent = require("dedent-js")
 
 // import { TGBot } from "../TelegramBot/TelegramBot"
-import { MONGO_CLIENT, COLLECTION_NAME, DB_NAME } from "./Database/mongoDBClient"
 import { TGBotFramework, TelegramCommand } from "telegram-bot-framework"
 import { FillAboutMeCommand } from "./Commands/FillAboutMe/FillAboutMe"
 import { StartCommand } from "./Commands/Start"
-import { SendMainMenu } from "./Commands/SendMainMenu"
+import { SendMainMenu, StackKeyboard, ArrayOfTextButtons } from "./Commands/SendMainMenu"
+import { Menu } from "./Models/Menu"
+import { ALL_MENUS } from "./Constants/Data/Menus/AllMenus"
 
 export class UADVstupBot extends TGBotFramework {
   // TODO: Refactor
@@ -16,55 +17,8 @@ export class UADVstupBot extends TGBotFramework {
   ‣ help text end`
 
   // override
-  // @ts-expect-error
   assignHandlers(bot: TelegramBot) {
     bot.on("polling_error", console.log)
-
-    // let commandParams: TelegramCommand = {
-    //   regexp: "test",
-    //   callback: (msg) => bot.sendMessage(msg.chat.id, "response"),
-    //   desc: ":flask:",
-    //   groupAndPrivate: true,
-    // }
-    // this.onCommand(commandParams)
-
-    // let channelId = -1002112513305
-
-    // const postToChannelCommandParams: TelegramCommand = {
-    //   regexp: "post_to_channel",
-    //   callback: (msg) => bot.sendMessage(channelId, "this message was published by a bot"),
-    //   desc: "sends message to specified channel",
-    //   groupAndPrivate: true,
-    // }
-
-    // this.onCommand(postToChannelCommandParams)
-
-    // const pingDbCommandParams: TelegramCommand = {
-    //   regexp: "ping_db",
-    //   desc: "pings a db to test whether it's working",
-    //   callback: async (msg) => {
-    //     // Connect the client to the server (optional starting in v4.7)
-    //     await MONGO_CLIENT.connect()
-    //     // Send a ping to confirm a successful connection
-    //     await MONGO_CLIENT.db("admin").command({ ping: 1 })
-    //     console.log("Pinged your deployment. You successfully connected to MongoDB!")
-
-    //     // Access the database and collection
-    //     const database = MONGO_CLIENT.db(DB_NAME)
-    //     const collection = database.collection(COLLECTION_NAME)
-
-    //     // Query the collection and read data
-    //     const document = await collection.findOne({})
-
-    //     // Log the retrieved documents
-    //     console.log("Retrieved documents:", document)
-
-    //     bot.sendMessage(msg.chat.id, "successfully pinged a db and retrieved a document: " + JSON.stringify(document))
-    //   },
-    //   groupAndPrivate: true,
-    // }
-
-    // this.onCommand(pingDbCommandParams)
 
     // твоя слеш команда тут:
 
@@ -81,7 +35,6 @@ export class UADVstupBot extends TGBotFramework {
   }
 
   // override
-  // @ts-expect-error
   assignGeneralHandler(bot: TelegramBot) {
     bot.on("message", (msg: TelegramBot.Message) => {
       console.log("message:", msg)
@@ -91,7 +44,6 @@ export class UADVstupBot extends TGBotFramework {
 
       // execute callback for a message and return
       if (this.callbackStorage[msg.from.id]) {
-        // @ts-expect-error
         this.callbackStorage[msg.from.id](msg)
         return
       }
@@ -140,6 +92,34 @@ export class UADVstupBot extends TGBotFramework {
         bot.sendMessage(msg.chat.id, contacts)
         return
       }
+
+      // go over all menus and their items to check if any of them match the message text
+      ALL_MENUS.forEach((menu) => {
+        menu.items.forEach((menuItem) => {
+          let captionLower = menuItem.caption.toLowerCase()
+          if (messageTextLowerCase === captionLower) {
+            let isItemLinkingToString = typeof menuItem.linksTo === "string"
+
+            if (isItemLinkingToString) {
+              let content = menuItem.linksTo as string
+
+              bot.sendMessage(msg.chat.id, content)
+              return
+            } else {
+              // otherwise, it's a submenu that is being linked to
+              let content = menuItem.linksTo as Menu
+              let kb = StackKeyboard(ArrayOfTextButtons(content.items.map((item) => item.caption)))
+
+              bot.sendMessage(msg.chat.id, menuItem.caption, {
+                reply_markup: {
+                  keyboard: kb,
+                  resize_keyboard: true,
+                },
+              })
+            }
+          }
+        })
+      })
 
       console.log("message text:", messageTextLowerCase)
 
