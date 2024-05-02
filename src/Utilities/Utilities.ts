@@ -37,3 +37,10 @@ export function readInMarkdownFileFromMarkdownFolder(fileName: string) {
   const filePath = path.join("media/markdown", fileName)
   return readInMarkdownFile(filePath)
 }
+
+export function unescape(text: string) {
+  // unescape any escaped characters
+  text = text.replace(/\\(.)/g, "$1")
+
+  return text
+}

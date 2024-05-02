@@ -2,7 +2,6 @@
 
 import { Menu } from "../../../Models/Menu"
 import { MenuItem } from "../../../Models/types"
-import { IMenu } from "../../../Models/types"
 import { GURTOZHYTOK_MENU } from "./GURTOZHYTOK_MENU"
 import { MOTIVACIYNII_LIST_MENU } from "./MOTIVACIYNII_LIST_MENU"
 import { PILGOVI_KATEGORII_MENU } from "./PILGOVI_KATEGORII_MENU"
@@ -12,10 +11,10 @@ import { VSE_PRO_VSTUP_MENU } from "./VSE_PRO_VSTUP_Menu"
 
 export const MAIN_MENU_ITEM_CAPTIONS = [
   "📍 ВСЕ ПРО ВСТУП 2024",
-  "📍 ТВОРЧИЙ КОНКУРС (ТК)",
+  "📍 ТВОРЧИЙ КОНКУРС",
   "📍 СПЕЦІАЛЬНОСТІ УАД",
   "📍 ПІЛЬГОВІ КАТЕГОРІЇ",
-  "📍 МОТИВАЦІЙНИЙ ЛИСТ (МЛ)",
+  "📍 МОТИВАЦІЙНИЙ ЛИСТ",
   "📍 ГУРТОЖИТОК",
 ]
 
@@ -24,10 +23,10 @@ const MAIN_MENU_ITEMS: MenuItem[] = [
     caption: MAIN_MENU_ITEM_CAPTIONS[0],
     linksTo: VSE_PRO_VSTUP_MENU,
   },
-  {
-    caption: MAIN_MENU_ITEM_CAPTIONS[1],
-    linksTo: TK_MENU,
-  },
+  // {
+  //   caption: MAIN_MENU_ITEM_CAPTIONS[1],
+  //   linksTo: TK_MENU,
+  // },
   {
     caption: MAIN_MENU_ITEM_CAPTIONS[2],
     linksTo: SPECIALTIES_UAD_MENU,
@@ -40,10 +39,10 @@ const MAIN_MENU_ITEMS: MenuItem[] = [
     caption: MAIN_MENU_ITEM_CAPTIONS[4],
     linksTo: MOTIVACIYNII_LIST_MENU,
   },
-  {
-    caption: MAIN_MENU_ITEM_CAPTIONS[5],
-    linksTo: GURTOZHYTOK_MENU,
-  },
+  // {
+  //   caption: MAIN_MENU_ITEM_CAPTIONS[5],
+  //   linksTo: GURTOZHYTOK_MENU,
+  // },
 ]
 
 const MAIN_MENU: Menu = new Menu({

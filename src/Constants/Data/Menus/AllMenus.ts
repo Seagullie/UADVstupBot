@@ -1,4 +1,5 @@
 import { Menu } from "../../../Models/Menu"
+import { APPLICATION_STATUS_MENU } from "./ApplicationStatusMenu"
 import { GURTOZHYTOK_MENU } from "./GURTOZHYTOK_MENU"
 
 import { MAIN_MENU } from "./MainMenu"
@@ -16,4 +17,5 @@ export const ALL_MENUS: Menu[] = [
   SPECIALTIES_UAD_MENU,
   TK_MENU,
   VSE_PRO_VSTUP_MENU,
+  APPLICATION_STATUS_MENU,
 ]

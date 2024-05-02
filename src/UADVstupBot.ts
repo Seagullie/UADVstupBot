@@ -7,7 +7,7 @@ import { TGBotFramework, TelegramCommand } from "telegram-bot-framework"
 import { FillAboutMeCommand } from "./Commands/FillAboutMe/FillAboutMe"
 import { StartCommand } from "./Commands/Start"
 import { SendMainMenu, StackKeyboard, ArrayOfTextButtons } from "./Commands/SendMainMenu/SendMainMenu"
-import { IMenu } from "./Models/types"
+import { IMenu, MenuItemCallback } from "./Models/types"
 import { ALL_MENUS } from "./Constants/Data/Menus/AllMenus"
 import { TextButton } from "./Commands/SendMainMenu/types/TextButton"
 import { Menu } from "./Models/Menu"
@@ -109,7 +109,8 @@ export class UADVstupBot extends TGBotFramework {
         return
       }
 
-      await this.handleMenuButtonPress(messageTextLowerCase, msg)
+      let handled = await this.handleMenuButtonPress(messageTextLowerCase, msg)
+      if (handled) return
 
       console.log("message text:", messageTextLowerCase)
 
@@ -132,6 +133,7 @@ export class UADVstupBot extends TGBotFramework {
         let captionLower = menuItem.caption.toLowerCase()
         if (messageTextLowerCase === captionLower) {
           let isItemLinkingToString = typeof menuItem.linksTo === "string"
+          let isItemLinkingToFunction = typeof menuItem.linksTo === "function"
 
           if (isItemLinkingToString) {
             let content = menuItem.linksTo as string
@@ -139,14 +141,19 @@ export class UADVstupBot extends TGBotFramework {
             bot.sendMessage(msg.chat.id, content, {
               parse_mode: "MarkdownV2",
             })
-            return
+            return true
+          } else if (isItemLinkingToFunction) {
+            let callback = menuItem.linksTo as MenuItemCallback
+
+            await callback(this, msg)
+            return true
           } else {
             // otherwise, it's a submenu that is being linked to
             let content = menuItem.linksTo as Menu
 
             this.sendMenu(msg.chat.id, content.introText ?? menuItem.caption, content)
 
-            return
+            return true
           }
         }
       }
