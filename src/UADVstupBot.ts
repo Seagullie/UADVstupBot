@@ -159,7 +159,7 @@ export class UADVstupBot extends TGBotFramework {
   async sendMenu(chatId: number, text: string, menu: Menu) {
     let bot = this.bot
 
-    text = escapeSpecialTgChars(text)
+    // text = escapeSpecialTgChars(text)
 
     let arrOfTextBtns = ArrayOfTextButtons(menu.items.map((item) => item.caption))
 
