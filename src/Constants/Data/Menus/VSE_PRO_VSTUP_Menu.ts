@@ -1,4 +1,5 @@
-import { Menu, MenuItem } from "../../../Models/Menu"
+import { Menu } from "../../../Models/Menu"
+import { MenuItem } from "../../../Models/types"
 import { readInMarkdownFileFromMarkdownFolder } from "../../../Utilities/Utilities"
 
 export const VSE_PRO_VSTUP_2024_SUBMENU_ITEM_CAPTIONS = [
@@ -48,6 +49,7 @@ const MENU_ITEMS: MenuItem[] = [
   },
 ]
 
-export const VSE_PRO_VSTUP_MENU: Menu = {
+export const VSE_PRO_VSTUP_MENU: Menu = new Menu({
+  // parentMenu: MAIN_MENU,
   items: MENU_ITEMS,
-}
+})

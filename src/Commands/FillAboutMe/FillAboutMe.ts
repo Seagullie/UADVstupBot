@@ -1,6 +1,6 @@
 import dedent = require("dedent-js")
 import { CommandCallbackWithCtx, InterviewFlow, TGBotFramework, TelegramCommand } from "telegram-bot-framework"
-import { SendMainMenu } from "../SendMainMenu"
+import { SendMainMenu } from "../SendMainMenu/SendMainMenu"
 import { UserInfo } from "../../Database/UserInfoRepository/types/UserInfo"
 import { UserInfoRepository } from "../../Database/UserInfoRepository/UserInfoRepository"
 

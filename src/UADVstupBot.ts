@@ -6,15 +6,23 @@ import dedent = require("dedent-js")
 import { TGBotFramework, TelegramCommand } from "telegram-bot-framework"
 import { FillAboutMeCommand } from "./Commands/FillAboutMe/FillAboutMe"
 import { StartCommand } from "./Commands/Start"
-import { SendMainMenu, StackKeyboard, ArrayOfTextButtons } from "./Commands/SendMainMenu"
-import { Menu } from "./Models/Menu"
+import { SendMainMenu, StackKeyboard, ArrayOfTextButtons } from "./Commands/SendMainMenu/SendMainMenu"
+import { IMenu } from "./Models/types"
 import { ALL_MENUS } from "./Constants/Data/Menus/AllMenus"
+import { TextButton } from "./Commands/SendMainMenu/types/TextButton"
+import { Menu } from "./Models/Menu"
+import { escapeSpecialTgChars } from "./Utilities/Utilities"
 
 export class UADVstupBot extends TGBotFramework {
   // TODO: Refactor
   helpTextStart = ""
   helpTextEnd = dedent`
   ‣ help text end`
+
+  /**
+   * Maps chat id to the current menu that the user is in
+   */
+  currentMenuStorage: { [chatId: number]: Menu } = {}
 
   // override
   assignHandlers(bot: TelegramBot) {
@@ -36,7 +44,7 @@ export class UADVstupBot extends TGBotFramework {
 
   // override
   assignGeneralHandler(bot: TelegramBot) {
-    bot.on("message", (msg: TelegramBot.Message) => {
+    bot.on("message", async (msg: TelegramBot.Message) => {
       console.log("message:", msg)
 
       // @ts-expect-error
@@ -93,37 +101,79 @@ export class UADVstupBot extends TGBotFramework {
         return
       }
 
-      // go over all menus and their items to check if any of them match the message text
-      ALL_MENUS.forEach((menu) => {
-        menu.items.forEach((menuItem) => {
-          let captionLower = menuItem.caption.toLowerCase()
-          if (messageTextLowerCase === captionLower) {
-            let isItemLinkingToString = typeof menuItem.linksTo === "string"
-
-            if (isItemLinkingToString) {
-              let content = menuItem.linksTo as string
-
-              bot.sendMessage(msg.chat.id, content)
-              return
-            } else {
-              // otherwise, it's a submenu that is being linked to
-              let content = menuItem.linksTo as Menu
-              let kb = StackKeyboard(ArrayOfTextButtons(content.items.map((item) => item.caption)))
-
-              bot.sendMessage(msg.chat.id, menuItem.caption, {
-                reply_markup: {
-                  keyboard: kb,
-                  resize_keyboard: true,
-                },
-              })
-            }
-          }
+      if (messageTextLowerCase === "md") {
+        let text = String.raw`https://vstup\.edbo\.gov\.ua/\ `
+        bot.sendMessage(msg.chat.id, text, {
+          parse_mode: "MarkdownV2",
         })
-      })
+        return
+      }
+
+      await this.handleMenuButtonPress(messageTextLowerCase, msg)
 
       console.log("message text:", messageTextLowerCase)
 
       bot.sendMessage(msg.chat.id, "Not recognized")
     })
+  }
+
+  /**
+   * Goes over all menus and their items to check if any of them match the message text
+   */
+  async handleMenuButtonPress(messageTextLowerCase: string, msg: TelegramBot.Message) {
+    let bot = this.bot
+
+    let currentMenu = this.currentMenuStorage[msg.chat.id] ?? ALL_MENUS[0]
+
+    // prioritize current menu for both not hitting navigation items in other menus and performance
+
+    for (let menu of [currentMenu, ...ALL_MENUS]) {
+      for (let menuItem of menu.items) {
+        let captionLower = menuItem.caption.toLowerCase()
+        if (messageTextLowerCase === captionLower) {
+          let isItemLinkingToString = typeof menuItem.linksTo === "string"
+
+          if (isItemLinkingToString) {
+            let content = menuItem.linksTo as string
+
+            bot.sendMessage(msg.chat.id, content, {
+              parse_mode: "MarkdownV2",
+            })
+            return
+          } else {
+            // otherwise, it's a submenu that is being linked to
+            let content = menuItem.linksTo as Menu
+
+            this.sendMenu(msg.chat.id, content.introText ?? menuItem.caption, content)
+
+            return
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Sends a menu to a chat, also stores the menu in the currentMenuStorage
+   */
+  async sendMenu(chatId: number, text: string, menu: Menu) {
+    let bot = this.bot
+
+    text = escapeSpecialTgChars(text)
+
+    let arrOfTextBtns = ArrayOfTextButtons(menu.items.map((item) => item.caption))
+
+    let kb = StackKeyboard(arrOfTextBtns)
+
+    bot.sendMessage(chatId, text, {
+      reply_markup: {
+        keyboard: kb,
+        resize_keyboard: true,
+      },
+
+      parse_mode: "MarkdownV2",
+    })
+
+    this.currentMenuStorage[chatId] = menu
   }
 }

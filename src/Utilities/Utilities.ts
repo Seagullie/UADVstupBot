@@ -1,27 +1,35 @@
 import fs = require("fs")
 import path = require("path")
 
+export function escapeSpecialTgChars(text: string) {
+  return (
+    text
+      .replace(/\*\*/g, "*")
+
+      // escape unescaped "-" chars
+      .replace(/(?<!\\)-/g, "\\-")
+      // escape unescaped "." chars
+      .replace(/(?<!\\)\./g, "\\.")
+      // escape unescaped "(" chars
+      .replace(/(?<!\\)\(/g, "\\(")
+      // escape unescaped ")" chars
+      .replace(/(?<!\\)\)/g, "\\)")
+      // escape unescaped "=" chars
+      .replace(/(?<!\\)=/g, "\\=")
+
+    // other chars to escape:
+    // '_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!' must be escaped with the preceding character '\'.
+  )
+}
+
 /**
- * Reads in a markdown file and escapes special characters so that they can be sent in a telegram message
+ * Reads in a markdown file.
  */
 export function readInMarkdownFile(filePath: string) {
-  let fileContent = fs
-    .readFileSync(filePath, "utf8")
-    // collapse double stars into single stars, as telegram doesn't support headers
-    .replace(/\*\*/g, "*")
+  let fileContent = fs.readFileSync(filePath, "utf8")
+  // collapse double stars into single stars, as telegram doesn't support headers
 
-    // escape unescaped "-" chars
-    .replace(/(?<!\\)-/g, "\\-")
-    // escape unescaped "." chars
-    .replace(/(?<!\\)\./g, "\\.")
-    // escape unescaped "(" chars
-    .replace(/(?<!\\)\(/g, "\\(")
-    // escape unescaped ")" chars
-    .replace(/(?<!\\)\)/g, "\\)")
-
-  // other chars to escape:
-  // '_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!' must be escaped with the preceding character '\'.
-
+  // return escapeSpecialTgChars(fileContent)
   return fileContent
 }
 

@@ -17,6 +17,6 @@ const MENU_ITEMS = [
   },
 ]
 
-export const GURTOZHYTOK_MENU: Menu = {
+export const GURTOZHYTOK_MENU: Menu = new Menu({
   items: MENU_ITEMS,
-}
+})

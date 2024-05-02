@@ -1,6 +1,8 @@
 // menus and submenus buttons
 
-import { Menu, MenuItem } from "../../../Models/Menu"
+import { Menu } from "../../../Models/Menu"
+import { MenuItem } from "../../../Models/types"
+import { IMenu } from "../../../Models/types"
 import { GURTOZHYTOK_MENU } from "./GURTOZHYTOK_MENU"
 import { MOTIVACIYNII_LIST_MENU } from "./MOTIVACIYNII_LIST_MENU"
 import { PILGOVI_KATEGORII_MENU } from "./PILGOVI_KATEGORII_MENU"
@@ -13,7 +15,7 @@ export const MAIN_MENU_ITEM_CAPTIONS = [
   "📍 ТВОРЧИЙ КОНКУРС (ТК)",
   "📍 СПЕЦІАЛЬНОСТІ УАД",
   "📍 ПІЛЬГОВІ КАТЕГОРІЇ",
-  "📍 МОТИВАЦІЙНИЙ ЛИСТ(МЛ)",
+  "📍 МОТИВАЦІЙНИЙ ЛИСТ (МЛ)",
   "📍 ГУРТОЖИТОК",
 ]
 
@@ -44,7 +46,13 @@ const MAIN_MENU_ITEMS: MenuItem[] = [
   },
 ]
 
-export const MAIN_MENU: Menu = {
+const MAIN_MENU: Menu = new Menu({
   isMainMenu: true,
-  items: MAIN_MENU_ITEMS,
-}
+  items: [],
+})
+
+MAIN_MENU_ITEMS.forEach((item) => {
+  MAIN_MENU.addSubmenuItem(item)
+})
+
+export { MAIN_MENU }

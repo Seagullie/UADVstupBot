@@ -1,4 +1,5 @@
 import { Menu } from "../../../Models/Menu"
+import { IMenu } from "../../../Models/types"
 import { readInMarkdownFileFromMarkdownFolder } from "../../../Utilities/Utilities"
 
 export const SPECIALTIES_UAD_MENU_ITEMS_CAPTIONS = [
@@ -29,6 +30,6 @@ const MENU_ITEMS = [
   },
 ]
 
-export const SPECIALTIES_UAD_MENU: Menu = {
+export const SPECIALTIES_UAD_MENU: Menu = new Menu({
   items: MENU_ITEMS,
-}
+})

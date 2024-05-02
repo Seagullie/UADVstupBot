@@ -26,6 +26,6 @@ const MENU_ITEMS = [
   },
 ]
 
-export const PILGOVI_KATEGORII_MENU: Menu = {
+export const PILGOVI_KATEGORII_MENU: Menu = new Menu({
   items: MENU_ITEMS,
-}
+})
