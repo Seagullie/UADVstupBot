@@ -114,7 +114,7 @@ export class UADVstupBot extends TGBotFramework {
 
       console.log("message text:", messageTextLowerCase)
 
-      bot.sendMessage(msg.chat.id, "Not recognized")
+      bot.sendMessage(msg.chat.id, "🤔🤔")
     })
   }
 
