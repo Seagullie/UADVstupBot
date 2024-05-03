@@ -16,11 +16,18 @@ export class UserInfoRepository {
   }
 
   public static async saveOrUpdateUserInfo(userInfo: UserInfo): Promise<void> {
-    await MONGO_CLIENT.db(DB_NAME).collection(COLLECTION_NAME).updateOne(
+    let response = await MONGO_CLIENT.db(DB_NAME).collection(COLLECTION_NAME).updateOne(
       { userId: userInfo.TgUserId }, // filter
       { $set: userInfo }, // update
       { upsert: true } // options
     )
+
+    // check if the operation was successful
+    if (response.modifiedCount === 0 && response.upsertedCount === 0) {
+      console.error("Failed to save or update user info")
+    } else {
+      console.log("User info saved or updated successfully")
+    }
   }
 
   // public async updateUserInfo(userInfo: UserInfo): Promise<void> {

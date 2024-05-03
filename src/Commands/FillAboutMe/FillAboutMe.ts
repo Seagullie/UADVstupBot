@@ -4,6 +4,7 @@ import { SendMainMenu } from "../SendMainMenu/SendMainMenu"
 import { UserInfo } from "../../Database/UserInfoRepository/types/UserInfo"
 import { UserInfoRepository } from "../../Database/UserInfoRepository/UserInfoRepository"
 import { escapeSpecialTgChars } from "../../Utilities/Utilities"
+import { TELEGRAM_REPORTING_CHANNEL_ID } from "../../Constants/Constants"
 
 export const FillAboutMeCallback: CommandCallbackWithCtx = async (msg, match, botFramework: TGBotFramework) => {
   let userId = msg.from.id.toString()
@@ -116,7 +117,7 @@ export const FillAboutMeCallback: CommandCallbackWithCtx = async (msg, match, bo
       UserInfoRepository.saveOrUpdateUserInfo(aboutMeDict)
 
       // send this data to a channel
-      let channelId = "-1002003585995"
+      let channelId = TELEGRAM_REPORTING_CHANNEL_ID
       let channelMsg = await botFramework.bot.sendMessage(channelId, aboutMeStr, {
         parse_mode: "MarkdownV2",
       })
