@@ -3,6 +3,7 @@ import { CommandCallbackWithCtx, InterviewFlow, TGBotFramework, TelegramCommand 
 import { SendMainMenu } from "../SendMainMenu/SendMainMenu"
 import { UserInfo } from "../../Database/UserInfoRepository/types/UserInfo"
 import { UserInfoRepository } from "../../Database/UserInfoRepository/UserInfoRepository"
+import { escapeSpecialTgChars } from "../../Utilities/Utilities"
 
 export const FillAboutMeCallback: CommandCallbackWithCtx = async (msg, match, botFramework: TGBotFramework) => {
   let userId = msg.from.id.toString()
@@ -79,22 +80,53 @@ export const FillAboutMeCallback: CommandCallbackWithCtx = async (msg, match, bo
       aboutMeDict.email = r.text
 
       // this was the final question. Save the dict to db:
-      botFramework.bot.sendMessage(r.chat.id, r.text + ". Дякуємо!")
+
+      let aboutMeDictEscaped = { ...aboutMeDict }
+      aboutMeDictEscaped.name = escapeSpecialTgChars(aboutMeDict.name)
+      aboutMeDictEscaped.specialty = escapeSpecialTgChars(aboutMeDict.specialty)
+      aboutMeDictEscaped.email = escapeSpecialTgChars(aboutMeDict.email)
+      aboutMeDictEscaped.TgUserHandle = escapeSpecialTgChars(aboutMeDict.TgUserHandle)
+      aboutMeDictEscaped.TgUserFirstName = escapeSpecialTgChars(aboutMeDict.TgUserFirstName)
+      aboutMeDictEscaped.TgUserLastName = escapeSpecialTgChars(aboutMeDict.TgUserLastName)
 
       // echo the answers back to user
       let aboutMeStr = dedent`
-      Ім'я: ${aboutMeDict.name}
-      Спеціальність: ${aboutMeDict.specialty}
-      Пошта: ${aboutMeDict.email}
-      Handle користувача: ${aboutMeDict.TgUserHandle}
-      Ім'я користувача: ${aboutMeDict.TgUserFirstName}
-      Прізвище користувача: ${aboutMeDict.TgUserLastName}
+
+      Абітурієнт залишив наступну інформацію:
+
+      >Особиста інформація
+
+      *Ім'я*: ${aboutMeDictEscaped.name}
+      *Спеціальність*: ${aboutMeDictEscaped.specialty}
+      *Пошта*: ${aboutMeDictEscaped.email}
+
+      >Телеграм інфо
+
+      *Handle користувача*: @${aboutMeDictEscaped.TgUserHandle}
+      *Ім'я користувача*: ${aboutMeDictEscaped.TgUserFirstName}
+      *Прізвище користувача*: ${aboutMeDictEscaped.TgUserLastName == "" ? "\\-" : aboutMeDict.TgUserLastName}
+      [*Користувач*](tg://user?id=${aboutMeDictEscaped.TgUserId})
       `
-      await botFramework.bot.sendMessage(r.chat.id, aboutMeStr)
+
+      let thankYouMessage = `Дякуємо за відповіді, ${aboutMeDict.TgUserFirstName}!`
+      await botFramework.bot.sendMessage(r.chat.id, thankYouMessage)
 
       await SendMainMenu(msg, match, botFramework)
 
       UserInfoRepository.saveOrUpdateUserInfo(aboutMeDict)
+
+      // send this data to a channel
+      let channelId = "-1002003585995"
+      let channelMsg = await botFramework.bot.sendMessage(channelId, aboutMeStr, {
+        parse_mode: "MarkdownV2",
+      })
+
+      let channelMsgId = channelMsg.message_id
+
+      // // comment on the send message
+      // await botFramework.bot.sendMessage(channelId, `tdst`, {
+      //   reply_to_message_id: channelMsgId,
+      // })
     },
 
     validateResponse: async (r) => {
