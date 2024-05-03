@@ -1,5 +1,5 @@
-import { Menu } from "../../../Models/Menu"
-import { readInMarkdownFileFromMarkdownFolder } from "../../../Utilities/Utilities"
+import { Menu } from "../Models/Menu"
+import { readInMarkdownFileFromMarkdownFolder } from "../Utilities/Utilities"
 
 const MOTIVACIYNII_LIST_MENU_ITEMS_CAPTIONS = ["Структура", "Обсяг", "Критерії оцінювання"]
 

@@ -1,7 +1,7 @@
 // menus and submenus buttons
 
-import { Menu } from "../../../Models/Menu"
-import { MenuItem } from "../../../Models/types"
+import { Menu } from "../Models/Menu"
+import { MenuItem } from "../Models/types"
 import { GURTOZHYTOK_MENU } from "./GURTOZHYTOK_MENU"
 import { MOTIVACIYNII_LIST_MENU } from "./MOTIVACIYNII_LIST_MENU"
 import { PILGOVI_KATEGORII_MENU } from "./PILGOVI_KATEGORII_MENU"

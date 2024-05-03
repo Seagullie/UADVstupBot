@@ -1,5 +1,5 @@
 import { CommandCallbackWithCtx, TGBotFramework } from "telegram-bot-framework"
-import { MAIN_MENU } from "../../Constants/Data/Menus/MainMenu"
+import { MAIN_MENU } from "../../Menus/MainMenu"
 import { TextButton } from "./types/TextButton"
 import { UADVstupBot } from "../../UADVstupBot"
 

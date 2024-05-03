@@ -1,7 +1,7 @@
 // menus and submenus buttons
 
-import { Menu } from "../../../Models/Menu"
-import { MenuItem } from "../../../Models/types"
+import { Menu } from "../Models/Menu"
+import { MenuItem } from "../Models/types"
 
 // творчий конкурс
 export const TK_MENU_ITEMS_CAPTIONS = ["Програма ТК", "Локація та розклад ТК", "Контакти", "Реєстрація на ТК"]

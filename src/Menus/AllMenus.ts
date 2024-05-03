@@ -1,4 +1,4 @@
-import { Menu } from "../../../Models/Menu"
+import { Menu } from "../Models/Menu"
 import { APPLICATION_STATUS_MENU } from "./ApplicationStatusMenu"
 import { GURTOZHYTOK_MENU } from "./GURTOZHYTOK_MENU"
 

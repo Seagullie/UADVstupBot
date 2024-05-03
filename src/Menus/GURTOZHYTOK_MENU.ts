@@ -1,4 +1,4 @@
-import { Menu } from "../../../Models/Menu"
+import { Menu } from "../Models/Menu"
 
 export const GURTOZHYTOK_MENU_ITEMS_CAPTIONS = ["Умови Поселення", "Оплата", "Контакти Студ. Містечка"]
 

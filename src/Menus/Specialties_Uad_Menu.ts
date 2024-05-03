@@ -1,7 +1,7 @@
 import TelegramBot = require("node-telegram-bot-api")
-import { Menu } from "../../../Models/Menu"
-import { readInMarkdownFileFromMarkdownFolder } from "../../../Utilities/Utilities"
-import { UADVstupBot } from "../../../UADVstupBot"
+import { Menu } from "../Models/Menu"
+import { readInMarkdownFileFromMarkdownFolder } from "../Utilities/Utilities"
+import { UADVstupBot } from "../UADVstupBot"
 
 import fs = require("fs")
 

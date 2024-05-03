@@ -1,8 +1,8 @@
 import TelegramBot = require("node-telegram-bot-api")
-import { Menu } from "../../../Models/Menu"
-import { MenuItem } from "../../../Models/types"
-import { UADVstupBot } from "../../../UADVstupBot"
-import { readInMarkdownFileFromMarkdownFolder } from "../../../Utilities/Utilities"
+import { Menu } from "../Models/Menu"
+import { MenuItem } from "../Models/types"
+import { UADVstupBot } from "../UADVstupBot"
+import { readInMarkdownFileFromMarkdownFolder } from "../Utilities/Utilities"
 import { APPLICATION_STATUS_MENU } from "./ApplicationStatusMenu"
 
 export const VSE_PRO_VSTUP_2024_SUBMENU_ITEM_CAPTIONS = [

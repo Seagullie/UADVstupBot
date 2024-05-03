@@ -1,7 +1,7 @@
 import dedent = require("dedent-js")
-import { Menu } from "../../../Models/Menu"
-import { MenuItem } from "../../../Models/types"
-import { readInMarkdownFileFromMarkdownFolder, unescape } from "../../../Utilities/Utilities"
+import { Menu } from "../Models/Menu"
+import { MenuItem } from "../Models/types"
+import { readInMarkdownFileFromMarkdownFolder, unescape } from "../Utilities/Utilities"
 
 // read in markdown files
 
