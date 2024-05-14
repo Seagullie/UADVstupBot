@@ -5,6 +5,15 @@ import { UserInfo } from "../../Database/UserInfoRepository/types/UserInfo"
 import { UserInfoRepository } from "../../Database/UserInfoRepository/UserInfoRepository"
 import { escapeSpecialTgChars } from "../../Utilities/Utilities"
 import { TELEGRAM_REPORTING_CHANNEL_ID } from "../../Constants/Constants"
+import TelegramBot = require("node-telegram-bot-api")
+
+async function sendIntroVideo(msg: TelegramBot.Message, botFramework: TGBotFramework) {
+  // file id of /media/video/bot_intro.mp4
+  let videoId = "BAACAgIAAxkBAAILtGZDmOIgcdnbDR3fcfkVXcWUUn4gAAJ1UgACze4ISqPo1AgPij4GNQQ"
+
+  let caption = "Загальний опис бота у цьому короткому відео."
+  return botFramework.bot.sendVideo(msg.chat.id, videoId, { caption: caption })
+}
 
 export const FillAboutMeCallback: CommandCallbackWithCtx = async (msg, match, botFramework: TGBotFramework) => {
   let userId = msg.from.id.toString()
@@ -31,11 +40,6 @@ export const FillAboutMeCallback: CommandCallbackWithCtx = async (msg, match, bo
 
     TgUserId: userId,
     timestampString: nowString,
-  }
-
-  let aboutUserDict = {
-    userId: userId,
-    aboutMe: aboutMeDict,
   }
 
   await botFramework.bot.sendMessage(msg.chat.id, "Давайте знайомитись!")
@@ -74,6 +78,8 @@ export const FillAboutMeCallback: CommandCallbackWithCtx = async (msg, match, bo
     },
   })
 
+  // final question
+  // TODO: add onFinished callback to InterviewFlow
   interviewFlow.addQuestion({
     question: "Залиште вашу пошту для зворотнього зв'язку.",
     expectedResponses: undefined,
@@ -90,7 +96,6 @@ export const FillAboutMeCallback: CommandCallbackWithCtx = async (msg, match, bo
       aboutMeDictEscaped.TgUserFirstName = escapeSpecialTgChars(aboutMeDict.TgUserFirstName)
       aboutMeDictEscaped.TgUserLastName = escapeSpecialTgChars(aboutMeDict.TgUserLastName)
 
-      // echo the answers back to user
       let aboutMeStr = dedent`
 
       Абітурієнт залишив наступну інформацію:
@@ -112,6 +117,9 @@ export const FillAboutMeCallback: CommandCallbackWithCtx = async (msg, match, bo
       let thankYouMessage = `Дякуємо за відповіді, ${aboutMeDict.TgUserFirstName}!`
       await botFramework.bot.sendMessage(r.chat.id, thankYouMessage)
 
+      // send intro video
+      await sendIntroVideo(r, botFramework)
+
       await SendMainMenu(msg, match, botFramework)
 
       UserInfoRepository.saveOrUpdateUserInfo(aboutMeDict)
@@ -121,13 +129,6 @@ export const FillAboutMeCallback: CommandCallbackWithCtx = async (msg, match, bo
       let channelMsg = await botFramework.bot.sendMessage(channelId, aboutMeStr, {
         parse_mode: "MarkdownV2",
       })
-
-      let channelMsgId = channelMsg.message_id
-
-      // // comment on the send message
-      // await botFramework.bot.sendMessage(channelId, `tdst`, {
-      //   reply_to_message_id: channelMsgId,
-      // })
     },
 
     validateResponse: async (r) => {
