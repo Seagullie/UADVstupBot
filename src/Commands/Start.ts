@@ -16,4 +16,6 @@ export const StartCommand: TelegramCommand = {
   regexp: "start",
   callback: Callback,
   desc: "Розпочати",
+  group: false,
+  groupAndPrivate: false,
 }

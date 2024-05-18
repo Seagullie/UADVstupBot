@@ -148,4 +148,5 @@ export const FillAboutMeCommand: TelegramCommand = {
   regexp: "introduce_self",
   callback: FillAboutMeCallback,
   desc: "Запитати основні дані абітурієнта",
+  group: false,
 }

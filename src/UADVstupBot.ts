@@ -3,21 +3,21 @@ import * as _ from "lodash"
 import dedent = require("dedent-js")
 
 // import { TGBot } from "../TelegramBot/TelegramBot"
-import { TGBotFramework, TelegramCommand } from "telegram-bot-framework"
+import { LOCALE, TGBotFramework, TelegramCommand } from "telegram-bot-framework"
 import { FillAboutMeCommand } from "./Commands/FillAboutMe/FillAboutMe"
 import { StartCommand } from "./Commands/Start"
 import { SendMainMenu, StackKeyboard, ArrayOfTextButtons } from "./Commands/SendMainMenu/SendMainMenu"
-import { IMenu, MenuItemCallback } from "./Models/types"
+import { MenuItemCallback } from "./Models/types"
 import { ALL_MENUS } from "./Menus/AllMenus"
-import { TextButton } from "./Commands/SendMainMenu/types/TextButton"
 import { Menu } from "./Models/Menu"
-import { escapeSpecialTgChars } from "./Utilities/Utilities"
 
 export class UADVstupBot extends TGBotFramework {
   // TODO: Refactor
   helpTextStart = ""
   helpTextEnd = dedent`
   ‣ help text end`
+
+  readonly defaultLocale: LOCALE = LOCALE.ua
 
   /**
    * Maps chat id to the current menu that the user is in
@@ -34,6 +34,8 @@ export class UADVstupBot extends TGBotFramework {
       regexp: "main_menu",
       callback: SendMainMenu,
       desc: "До головного меню",
+      group: true,
+      groupAndPrivate: true,
     }
 
     this.onCommand(sendMainMenuCommandParams)
@@ -51,8 +53,8 @@ export class UADVstupBot extends TGBotFramework {
       bot.setChatMenuButton(msg.chat.id, { type: "commands" })
 
       // execute callback for a message and return
-      if (this.callbackStorage[msg.from.id]) {
-        this.callbackStorage[msg.from.id](msg)
+      if (this.callbackStorage[msg.chat.id]) {
+        this.callbackStorage[msg.chat.id](msg)
         return
       }
 
