@@ -10,6 +10,7 @@ import { SendMainMenu, StackKeyboard, ArrayOfTextButtons } from "./Commands/Send
 import { MenuItemCallback } from "./Models/types"
 import { ALL_MENUS } from "./Menus/AllMenus"
 import { Menu } from "./Models/Menu"
+import { GetAbitChatLinkCommand } from "./Commands/GetAbitChatLink"
 
 export class UADVstupBot extends TGBotFramework {
   // TODO: Refactor
@@ -41,6 +42,7 @@ export class UADVstupBot extends TGBotFramework {
     this.onCommand(sendMainMenuCommandParams)
 
     this.onCommand(FillAboutMeCommand)
+    this.onCommand(GetAbitChatLinkCommand)
     this.onCommand(StartCommand)
   }
 
