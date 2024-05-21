@@ -1,0 +1,12 @@
+// tsconfig.prod.json
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+      "sourceMap": false,
+      "skipLibCheck": true,
+      "declaration": false,
+      "inlineSourceMap": false,
+      "inlineSources": false,
+      
+    }
+  }
