@@ -11,6 +11,7 @@
         "experimentalDecorators": true,
 
         "noEmitOnError": false,
+        "skipLibCheck": true
     },
 
     // "include": ["src/**/*", "Secrets.ts"],
