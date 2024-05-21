@@ -23,10 +23,10 @@ const MAIN_MENU_ITEMS: MenuItem[] = [
     caption: MAIN_MENU_ITEM_CAPTIONS[0],
     linksTo: VSE_PRO_VSTUP_MENU,
   },
-  // {
-  //   caption: MAIN_MENU_ITEM_CAPTIONS[1],
-  //   linksTo: TK_MENU,
-  // },
+  {
+    caption: MAIN_MENU_ITEM_CAPTIONS[1],
+    linksTo: TK_MENU,
+  },
   {
     caption: MAIN_MENU_ITEM_CAPTIONS[2],
     linksTo: SPECIALTIES_UAD_MENU,
