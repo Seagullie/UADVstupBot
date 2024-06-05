@@ -139,6 +139,9 @@ export const FillAboutMeCallback: CommandCallbackWithCtx = async (msg, match, bo
       let thankYouMessage = `Дякуємо за відповіді, ${aboutMeDict.TgUserFirstName}!`
       await botFramework.bot.sendMessage(r.chat.id, thankYouMessage)
 
+      // save to db
+      UserInfoRepository.saveOrUpdateUserInfo(aboutMeDict)
+
       // send intro video
       try {
         await sendIntroVideo(r, botFramework)
@@ -147,8 +150,6 @@ export const FillAboutMeCallback: CommandCallbackWithCtx = async (msg, match, bo
       }
 
       await SendMainMenu(msg, match, botFramework)
-
-      UserInfoRepository.saveOrUpdateUserInfo(aboutMeDict)
 
       // send this data to a channel
       let channelId = TELEGRAM_REPORTING_CHANNEL_ID
