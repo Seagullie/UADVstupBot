@@ -10,12 +10,49 @@ export function escapeSpecialTgChars(text: string) {
       .replace(/(?<!\\)-/g, "\\-")
       // escape unescaped "." chars
       .replace(/(?<!\\)\./g, "\\.")
+
       // escape unescaped "(" chars
       .replace(/(?<!\\)\(/g, "\\(")
       // escape unescaped ")" chars
       .replace(/(?<!\\)\)/g, "\\)")
+
       // escape unescaped "=" chars
       .replace(/(?<!\\)=/g, "\\=")
+      // escape unescaped "_" chars
+      .replace(/(?<!\\)_/g, "\\_")
+      // escape unescaped "+" chars
+      .replace(/(?<!\\)\+/g, "\\+")
+
+      // escape unescaped "[" chars
+      .replace(/(?<!\\)\[/g, "\\[")
+      // escape unescaped "]" chars
+      .replace(/(?<!\\)\]/g, "\\]")
+
+      // escape unescaped "{" chars
+      .replace(/(?<!\\){/g, "\\{")
+      // escape unescaped "}" chars
+      .replace(/(?<!\\)}/g, "\\}")
+
+      // escape unescaped "|" chars
+      .replace(/(?<!\\)\|/g, "\\|")
+      // escape unescaped "~" chars
+      .replace(/(?<!\\)~/g, "\\~")
+      // escape unescaped "`" chars
+      .replace(/(?<!\\)`/g, "\\`")
+
+      // escape unescaped ">" chars
+      .replace(/(?<!\\)>/g, "\\>")
+      // escape unescaped "<" chars
+      .replace(/(?<!\\)</g, "\\<")
+
+      // escape unescaped "#" chars
+      .replace(/(?<!\\)#/g, "\\#")
+      // escape unescaped "!" chars
+      .replace(/(?<!\\)!/g, "\\!")
+      // escape unescaped "*" chars
+      .replace(/(?<!\\)\*/g, "\\*")
+      // escape unescaped "\" chars
+      .replace(/(?<!\\)\\/g, "\\\\")
 
     // other chars to escape:
     // '_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!' must be escaped with the preceding character '\'.
