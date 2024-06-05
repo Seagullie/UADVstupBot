@@ -132,7 +132,7 @@ export const FillAboutMeCallback: CommandCallbackWithCtx = async (msg, match, bo
 
       *Handle користувача*: @${aboutMeDictEscaped.TgUserHandle}
       *Ім'я користувача*: ${aboutMeDictEscaped.TgUserFirstName}
-      *Прізвище користувача*: ${aboutMeDictEscaped.TgUserLastName == "" ? "\\-" : aboutMeDict.TgUserLastName}
+      *Прізвище користувача*: ${aboutMeDictEscaped.TgUserLastName == "" ? "\\-" : aboutMeDictEscaped.TgUserLastName}
       [*Користувач*](tg://user?id=${aboutMeDictEscaped.TgUserId})
       `
 
