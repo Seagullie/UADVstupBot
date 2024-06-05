@@ -6,13 +6,35 @@ import { UserInfoRepository } from "../../Database/UserInfoRepository/UserInfoRe
 import { escapeSpecialTgChars } from "../../Utilities/Utilities"
 import { TELEGRAM_REPORTING_CHANNEL_ID } from "../../Constants/Constants"
 import TelegramBot = require("node-telegram-bot-api")
+import { INTRO_VIDEO_ID } from "../../Constants/Secrets"
 
+/**
+ * Sends an intro video to the user. If the video is not found, sends a local video file.
+ */
 async function sendIntroVideo(msg: TelegramBot.Message, botFramework: TGBotFramework) {
-  // file id of /media/video/bot_intro.mp4
-  let videoId = "BAACAgIAAxkBAAILtGZDmOIgcdnbDR3fcfkVXcWUUn4gAAJ1UgACze4ISqPo1AgPij4GNQQ"
-
   let caption = "Загальний опис бота у цьому короткому відео."
-  return botFramework.bot.sendVideo(msg.chat.id, videoId, { caption: caption })
+
+  try {
+    let videoId = INTRO_VIDEO_ID
+
+    return botFramework.bot.sendVideo(msg.chat.id, videoId, { caption: caption })
+  } catch (err) {
+    console.error(err)
+
+    let pathToVideo = "media/video/bot_intro.mp4"
+    return botFramework.bot.sendVideo(
+      msg.chat.id,
+      pathToVideo,
+      {
+        caption: caption,
+        thumbnail: pathToVideo,
+      },
+      {
+        contentType: "video/mp4",
+        filename: "bot_intro.mp4",
+      }
+    )
+  }
 }
 
 export const FillAboutMeCallback: CommandCallbackWithCtx = async (msg, match, botFramework: TGBotFramework) => {
@@ -118,7 +140,11 @@ export const FillAboutMeCallback: CommandCallbackWithCtx = async (msg, match, bo
       await botFramework.bot.sendMessage(r.chat.id, thankYouMessage)
 
       // send intro video
-      await sendIntroVideo(r, botFramework)
+      try {
+        await sendIntroVideo(r, botFramework)
+      } catch (err) {
+        console.error(err)
+      }
 
       await SendMainMenu(msg, match, botFramework)
 

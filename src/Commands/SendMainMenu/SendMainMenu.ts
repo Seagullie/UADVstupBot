@@ -24,5 +24,5 @@ export const SendMainMenu: CommandCallbackWithCtx = async (msg, match, botFramew
   let bot = botFramework.bot
 
   let text = "Ось меню зі основними функціями ⬇"
-  botFramework.sendMenu(msg.chat.id, text, MAIN_MENU)
+  return botFramework.sendMenu(msg.chat.id, text, MAIN_MENU)
 }
