@@ -25,6 +25,7 @@ export class UserInfoRepository {
     // check if the operation was successful
     if (response.modifiedCount === 0 && response.upsertedCount === 0) {
       console.error("Failed to save or update user info")
+      console.error(response)
     } else {
       console.log("User info saved or updated successfully")
     }

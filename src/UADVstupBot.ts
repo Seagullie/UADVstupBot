@@ -11,6 +11,10 @@ import { MenuItemCallback } from "./Models/types"
 import { ALL_MENUS } from "./Menus/AllMenus"
 import { Menu } from "./Models/Menu"
 import { GetAbitChatLinkCommand } from "./Commands/GetAbitChatLink"
+import { hijackConsoleMethods } from "./Services/LoggerService"
+
+// hijack console methods to log to file via winston
+hijackConsoleMethods()
 
 export class UADVstupBot extends TGBotFramework {
   // TODO: Refactor
@@ -49,7 +53,7 @@ export class UADVstupBot extends TGBotFramework {
   // override
   assignGeneralHandler(bot: TelegramBot) {
     bot.on("message", async (msg: TelegramBot.Message) => {
-      console.log("message:", msg)
+      console.log("got message object from user:", msg)
 
       // @ts-expect-error
       bot.setChatMenuButton(msg.chat.id, { type: "commands" })
