@@ -4,7 +4,7 @@ import { SendMainMenu } from "../SendMainMenu/SendMainMenu"
 import { UserInfo } from "../../Database/UserInfoRepository/types/UserInfo"
 import { UserInfoRepository } from "../../Database/UserInfoRepository/UserInfoRepository"
 import { escapeSpecialTgChars } from "../../Utilities/Utilities"
-import { TELEGRAM_REPORTING_CHANNEL_ID } from "../../Constants/Constants"
+import { IS_IN_PROD, TELEGRAM_REPORTING_CHANNEL_ID } from "../../Constants/Constants"
 import TelegramBot = require("node-telegram-bot-api")
 import { INTRO_VIDEO_ID } from "../../Constants/Secrets"
 
@@ -168,12 +168,13 @@ export const FillAboutMeCallback: CommandCallbackWithCtx = async (msg, match, bo
     },
   })
 
-  return await interviewFlow.start(msg.chat.id)
+  const timeoutMillis = IS_IN_PROD ? 90 * 1000 : 30 * 1000 // 90 seconds in prod, 30 in dev
+  return await interviewFlow.start(msg.chat.id, timeoutMillis)
 }
 
 export const FillAboutMeCommand: TelegramCommand = {
   regexp: "introduce_self",
   callback: FillAboutMeCallback,
-  desc: "Запитати основні дані абітурієнта",
+  desc: "Оновити дані абітурієнта",
   group: false,
 }
