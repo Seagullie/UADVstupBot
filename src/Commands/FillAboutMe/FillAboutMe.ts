@@ -71,7 +71,7 @@ export const FillAboutMeCallback: CommandCallbackWithCtx = async (msg, match, bo
   // add questions
 
   interviewFlow.addQuestion({
-    question: "Як вас звати? (ПІБ)",
+    question: "Як вас звати? (ПІБ) [1/3]",
     expectedResponses: undefined,
     showKb: true,
     onResponse: (r) => {
@@ -92,7 +92,7 @@ export const FillAboutMeCallback: CommandCallbackWithCtx = async (msg, match, bo
   })
 
   interviewFlow.addQuestion({
-    question: "На яку спеціальність плануєте вступати?",
+    question: "На яку спеціальність плануєте вступати? [2/3]",
     expectedResponses: undefined,
     showKb: true,
     onResponse: (r) => {
@@ -103,7 +103,7 @@ export const FillAboutMeCallback: CommandCallbackWithCtx = async (msg, match, bo
   // final question
   // TODO: add onFinished callback to InterviewFlow
   interviewFlow.addQuestion({
-    question: "Залиште вашу пошту для зворотнього зв'язку.",
+    question: "Залиште вашу пошту для зворотнього зв'язку. [3/3]",
     expectedResponses: undefined,
     onResponse: async (r) => {
       aboutMeDict.email = r.text

@@ -6,6 +6,8 @@ const { combine, timestamp, printf } = winston.format
 
 const PATH_TO_COMBINED_LOGS = "logs/combined.log"
 const PATH_TO_ERROR_LOGS = "logs/errors.log"
+const PATH_TO_EXCEPTIONS_LOGS = "logs/exceptions.log"
+const PATH_TO_REJECTIONS_LOGS = "logs/rejections.log"
 
 // Define custom log format
 const logFormat = printf(({ level, message, timestamp }) => {
@@ -27,12 +29,17 @@ const logger = winston.createLogger({
 logger.add(
   new winston.transports.Console({
     format: winston.format.combine(winston.format.colorize(), logFormat),
+    handleExceptions: true,
+    handleRejections: true,
   })
 )
 logger.add(
   new winston.transports.File({
     filename: PATH_TO_COMBINED_LOGS,
     format: winston.format.combine(timestamp(), logFormat),
+    handleExceptions: true,
+    handleRejections: true,
+    maxsize: 2242880, // 2MB
   })
 )
 
@@ -45,12 +52,17 @@ logger.add(
   })
 )
 
-// add a transport for user submitted data
-logger.add(
+// Call exceptions.handle with a transport to handle exceptions
+logger.exceptions.handle(
   new winston.transports.File({
-    level: ""
-    filename: "logs/user-submitted-data.log",
-    format: winston.format.combine(timestamp(), logFormat),
+    filename: PATH_TO_EXCEPTIONS_LOGS,
+  })
+)
+
+// transport for rejections
+logger.rejections.handle(
+  new winston.transports.File({
+    filename: PATH_TO_REJECTIONS_LOGS,
   })
 )
 
@@ -65,11 +77,3 @@ export function hijackConsoleMethods() {
   console.warn = (...args: unknown[]) => logger.warn(args.map(toJSON).join(" "))
   console.debug = (...args: unknown[]) => logger.debug(args.map(toJSON).join(" "))
 }
-
-// Example usage
-// console.log("This is an info message")
-// console.error("This is an error message")
-// console.warn("This is a warning message")
-// console.debug("This is a debug message")
-
-// export default logger
