@@ -77,17 +77,6 @@ export class UADVstupBot extends TGBotFramework {
       let messageText: string = msg.text
       let messageTextLowerCase = messageText.toLowerCase()
 
-      // if (messageTextLowerCase === "🎓 список спеціальностей") {
-      //   let listOfSpecialties = dedent`
-      //   Список спеціальностей:
-      //   ‣ Спеціальність 1
-      //   ‣ Спеціальність 2
-      //   ‣ Спеціальність 3
-      //   `
-      //   bot.sendMessage(msg.chat.id, listOfSpecialties)
-      //   return
-      // }
-
       if (messageTextLowerCase === "md") {
         let text = String.raw`https://vstup\.edbo\.gov\.ua/\ `
         bot.sendMessage(msg.chat.id, text, {

@@ -1,5 +1,7 @@
 # UADVstupBot - Telegram бот для абітурієнтів Української Академії Друкарства (тепер окремий інститут Львівської Політехніки)
 
+🤖 [Спробувати бота](http://t.me/UADVstup_Bot)
+
 ## Опис
 
 Цей бот допомагає абітурієнтам отримати інформацію про вступ до університету та спрощує комунікацію між абітурієнтами та приймальною комісією.
@@ -30,9 +32,12 @@ npm install
 3. Створіть файл з налаштуваннями `.env`:
 
 ```env
-TELEGRAM_BOT_TOKEN=your_bot_token
+HANDLE=your_tg_bot_handle
+TOKEN=your_tg_bot_token
 TELEGRAM_REPORTING_CHANNEL_ID=your_channel_id
-MONGO_CONNECTION_STRING=your_mongodb_connection_string
+MONGODB_CONNECTION_STRING=your_mongodb_connection_string
+INTRO_VIDEO_ID=intro_video_id
+NODE_ENV = "development or production or test"
 ```
 
 4. Запустіть бот:
