@@ -37,7 +37,7 @@ TOKEN=your_tg_bot_token
 TELEGRAM_REPORTING_CHANNEL_ID=your_channel_id
 MONGODB_CONNECTION_STRING=your_mongodb_connection_string
 INTRO_VIDEO_ID=intro_video_id
-NODE_ENV = "development or production or test"
+NODE_ENV=development or production or test
 ```
 
 4. Запустіть бот:
